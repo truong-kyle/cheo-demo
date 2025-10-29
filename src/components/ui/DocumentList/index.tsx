@@ -10,6 +10,7 @@ import { useState } from "react";
 import { uploadFile } from "@/db/client/upload";
 import DragAndDrop from "@/components/ui/DragAndDrop";
 import { toast } from "sonner";
+import { motion } from "motion/react";
 
 interface DocumentListProps {
   uploadedDocuments: {
@@ -79,13 +80,17 @@ export default function DocumentList({
       <div className="flex flex-col mb-2 items-center w-full">
         <h1 className="text-xl font-bold select-none">Uploaded Documents</h1>
         {uploadedDocuments.data.length > 0 && (
-          <div className="w-full flex justify-end">
-            
-              <div className={`${data ? "bg-[oklch(0.9_0_0)]" : "bg-[oklch(0.7_0_0)]"} transition-colors flex flex-col items-end gap-2  p-2 rounded-md w-full text-[oklch(0.3_0_270)] shadow-inner shadow-[oklch(0.2_0_0)]`}>
-                {data ? (
-                  <>
-                <div className="flex items-center space-x-3">
-                  <label
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full flex justify-end"
+          >
+            <div className={`${data ? "bg-[oklch(0.9_0_0)]" : "bg-[oklch(0.7_0_0)]"} transition-colors flex flex-col items-end gap-2  p-2 rounded-md w-full text-[oklch(0.3_0_270)] shadow-inner shadow-[oklch(0.2_0_0)]`}>
+              {data ? (
+                <>
+                  <div className="flex items-center space-x-3">
+                    <label
                     htmlFor="file-upload"
                     className="select-none cursor-pointer hover:text-[oklch(0.1_0_0)] transition-colors text-sm"
                   >
@@ -131,13 +136,16 @@ export default function DocumentList({
               }}
               className="hidden"
             />
-          </div>
+          </motion.div>
         )}
       </div>
       {uploadedDocuments.data.length === 0 && <DragAndDrop />}
       <ul>
-        {uploadedDocuments.data?.map((doc) => (
-          <li
+        {uploadedDocuments.data?.map((doc, index) => (
+          <motion.li
+          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
             key={`doc-${doc.file_id}`}
             onClick={() => onSelectFile(doc.file_id)}
             className={`relative w-full p-4 mb-2 rounded-lg hover:bg-[oklch(0.35_0_0)] cursor-pointer transition-colors group  ${
@@ -161,7 +169,7 @@ export default function DocumentList({
             <p className="text-sm text-[oklch(0.7_0_0)] whitespace-nowrap">
               {new Date(doc.created_at).toLocaleString()}
             </p>
-          </li>
+          </motion.li>
         ))}
       </ul>
     </div>

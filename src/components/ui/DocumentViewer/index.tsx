@@ -32,12 +32,11 @@ const DocumentViewer = ({ file }: DocumentViewerProps) => {
   const [error, setError] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [fitToWidth, setFitToWidth] = useState(false);
+  const [fitToWidth, setFitToWidth] = useState(true);
   const [pageWidth, setPageWidth] = useState<number | null>(null);
 
   const updateWidth = () => {
     if (!containerRef.current) return;
-    // account for padding/margins inside the viewer; subtract a small value
     const w = containerRef.current.clientWidth - 24;
     setPageWidth(w > 0 ? w : 0);
   };
@@ -163,7 +162,7 @@ const DocumentViewer = ({ file }: DocumentViewerProps) => {
               }}
               className={`px-3 py-1 ml-2 rounded ${
                 fitToWidth
-                  ? "bg-[oklch(0.35_0.25_250)] text-white"
+                  ? "bg-[oklch(0.45_0.05_270)] text-white"
                   : "bg-[oklch(0.45_0.15_270)] text-white"
               }`}
             >
