@@ -43,25 +43,25 @@ export default function SignUpForm() {
                 name="first_name"
                 type="text"
                 placeholder="First Name"
-                className="py-0.5 border-b border-b-gray-500/50 focus:outline-none"
+                className="py-0.5 border-b border-b-[oklch(0.4_0_0)] focus:outline-none"
               />
               <input
                 name="last_name"
                 type="text"
                 placeholder="Last Name"
-                className="py-0.5 border-b border-b-gray-500/50 focus:outline-none"
+                className="py-0.5 border-b border-b-[oklch(0.4_0_0)] focus:outline-none"
               />
               <input
                 name="email"
                 type="email"
                 placeholder="Email"
-                className="py-0.5 border-b border-b-gray-500/50 focus:outline-none"
+                className="py-0.5 border-b border-b-[oklch(0.4_0_0)] focus:outline-none"
               />
               <input
                 name="password"
                 type="password"
                 placeholder="Password"
-                className="py-0.5 border-b border-b-gray-500/50 focus:outline-none"
+                className="py-0.5 border-b border-b-[oklch(0.4_0_0)] focus:outline-none"
               />
               <button
                 type="submit"
@@ -69,7 +69,7 @@ export default function SignUpForm() {
               >
                 Sign Up
               </button>
-              {error && <p className="text-red-500">{error}</p>}
+              {error && <p className="text-[oklch(0.7_0.2_30)]">{error}</p>}
             </form>
             <span className="text-center">
               Already have an account?{" "}

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import { generatePreview } from "@/db/client/documents";
 
@@ -8,10 +8,9 @@ const Document = dynamic(
   () => import("react-pdf").then((mod) => mod.Document),
   { ssr: false }
 );
-const Page = dynamic(
-  () => import("react-pdf").then((mod) => mod.Page),
-  { ssr: false }
-);
+const Page = dynamic(() => import("react-pdf").then((mod) => mod.Page), {
+  ssr: false,
+});
 
 // Import pdfjs and configure worker only on client
 let pdfjs: typeof import("react-pdf").pdfjs | null = null;
@@ -28,9 +27,20 @@ interface DocumentViewerProps {
 
 const DocumentViewer = ({ file }: DocumentViewerProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [numPages, setNumPages] = useState<number>(0);
+  const [numPages, setNumPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [scale, setScale] = useState(1);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [fitToWidth, setFitToWidth] = useState(false);
+  const [pageWidth, setPageWidth] = useState<number | null>(null);
+
+  const updateWidth = () => {
+    if (!containerRef.current) return;
+    // account for padding/margins inside the viewer; subtract a small value
+    const w = containerRef.current.clientWidth - 24;
+    setPageWidth(w > 0 ? w : 0);
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -49,9 +59,9 @@ const DocumentViewer = ({ file }: DocumentViewerProps) => {
 
       try {
         const result = await generatePreview(file);
-        
+
         if (!mounted) return;
-        
+
         if (result.error) {
           setError(result.error.message ?? "Failed to generate preview");
           setLoading(false);
@@ -77,9 +87,9 @@ const DocumentViewer = ({ file }: DocumentViewerProps) => {
     };
   }, [file]);
 
-   if (!previewUrl) {
+  if (!previewUrl) {
     return (
-       <div className="h-full overflow-auto bg-[oklch(0.25_0_0)] shadow-(--shadow-m) rounded-xl p-3 flex items-center flex-col justify-center select-none">
+      <div className="h-full overflow-auto bg-[oklch(0.25_0_0)] shadow-(--shadow-m) rounded-xl p-3 flex items-center flex-col justify-center select-none">
         <p className="text-gray-400">No document to display</p>
       </div>
     );
@@ -95,38 +105,98 @@ const DocumentViewer = ({ file }: DocumentViewerProps) => {
 
   if (error) {
     return (
-       <div className="h-full overflow-auto bg-[oklch(0.25_0_0)] shadow-(--shadow-m) rounded-xl p-3 flex items-center flex-col justify-center">
-        <p className="text-[oklch(0.7_0.15_0)]">Error: {error}</p>
+      <div className="h-full overflow-auto bg-[oklch(0.25_0_0)] shadow-(--shadow-m) rounded-xl p-3 flex items-center flex-col justify-center">
+        <p className="text-[oklch(0.7_0.2_30)]">Error: {error}</p>
       </div>
     );
   }
 
- 
-
   return (
     <div className="h-full overflow-y-auto bg-[oklch(0.25_0_0)] shadow-(--shadow-m) rounded-xl p-3">
       <div className="flex items-center flex-col gap-4 max-h-[calc(100vh-8rem)]">
-        <Document
-          file={previewUrl}
-          onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-          onLoadError={(error) => setError(error.message)}
-          loading={
-            <div className="flex items-center justify-center p-8">
-              <p className="text-gray-400">Loading PDF...</p>
+        <div ref={containerRef} className="w-full flex flex-col gap-3">
+          {/* Zoom controls */}
+          <div className="sticky top-0 left-0 z-20 flex items-center gap-3 justify-center p-2 rounded-full bg-[oklch(0.3_0_0)]">
+            <button
+              aria-label="Zoom out"
+              onClick={() =>
+                setScale((s) => Math.max(0.2, +(s - 0.1).toFixed(2)))
+              }
+              className="px-3 py-1 bg-[oklch(0.6_0_270)] text-white rounded disabled:opacity-50"
+            >
+              −
+            </button>
+            <div className="flex items-center gap-2">
+              <input
+                type="range"
+                min={0.2}
+                max={3}
+                step={0.05}
+                value={scale}
+                onChange={(e) => {
+                  setFitToWidth(false);
+                  setScale(Number(e.target.value));
+                }}
+                className="w-56"
+                aria-label="Zoom level"
+              />
+              <span className="w-16 text-center">
+                {Math.round(scale * 100)}%
+              </span>
             </div>
-          }
-        >
-          {Array.from(new Array(numPages), (_, index) => (
-            <Page
-              key={`page_${index + 1}`}
-              pageNumber={index + 1}
-              renderTextLayer={false}
-              renderAnnotationLayer={false}
-              scale={0.74}
-              className="mb-4"
-            />
-          ))}
-        </Document>
+            <button
+              aria-label="Zoom in"
+              onClick={() =>
+                setScale((s) => Math.min(3, +(s + 0.1).toFixed(2)))
+              }
+              className="px-3 py-1 bg-[oklch(0.6_0_270)] text-white rounded disabled:opacity-50"
+            >
+              +
+            </button>
+
+            <button
+              aria-label="Fit to width"
+              onClick={() => {
+                setFitToWidth(true);
+                requestAnimationFrame(updateWidth);
+                setScale(1);
+              }}
+              className={`px-3 py-1 ml-2 rounded ${
+                fitToWidth
+                  ? "bg-[oklch(0.35_0.25_250)] text-white"
+                  : "bg-[oklch(0.45_0.15_270)] text-white"
+              }`}
+            >
+              Fit
+            </button>
+          </div>
+
+          <Document
+            file={previewUrl}
+            onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+            onLoadError={(error) => setError(error.message)}
+            loading={
+              <div className="flex items-center justify-center p-8">
+                <p className="text-gray-400">Loading PDF...</p>
+              </div>
+            }
+          >
+            {Array.from(new Array(numPages), (_, index) => {
+              const pageProps =
+                fitToWidth && pageWidth ? { width: pageWidth } : { scale };
+              return (
+                <Page
+                  key={`page_${index + 1}`}
+                  pageNumber={index + 1}
+                  renderTextLayer={false}
+                  renderAnnotationLayer={false}
+                  {...pageProps}
+                  className="mb-4"
+                />
+              );
+            })}
+          </Document>
+        </div>
         {numPages > 0 && (
           <p className="fixed bottom-10 select-none text-center text-[oklch(0.2_0_0)] bg-[oklch(0.75_0_0)] rounded-full shadow-inner shadow-[oklch(0.2_0_0)] px-4 py-1 w-min whitespace-nowrap">
             {numPages} Page{numPages !== 1 ? "s" : ""}

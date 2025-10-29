@@ -57,7 +57,7 @@ export default function Navbar({ user }: NavbarProps) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-[120%] p-4 z-10 w-50 bg-[oklch(0.9_0_0)] text-black rounded-lg shadow-(--shadow-s)">
+            className="absolute top-[120%] p-4 z-50 w-50 bg-[oklch(0.9_0_0)] text-black rounded-lg shadow-(--shadow-s)">
               <ul className="flex flex-col">
                 <Link
                   href="/dashboard"

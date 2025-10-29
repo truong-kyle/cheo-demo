@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import DocumentViewer from "@/components/ui/DocumentViewer";
-import UploadedDocuments from "@/components/ui/UploadedDocuments";
+import DocumentList from "@/components/ui/DocumentList";
+import DocumentEditor from "@/components/ui/DocumentEditor";
 
 interface DashboardClientProps {
   uploadedDocuments: {
@@ -21,16 +22,21 @@ export default function DashboardClient({ uploadedDocuments }: DashboardClientPr
   );
 
   return (
-    <div className="w-full h-full grid grid-cols-5 bg-[oklch(0.2_0_0)] text-[oklch(0.9_0_0)] p-4 gap-4">
-      <UploadedDocuments 
+    <div className="w-full h-full grid grid-cols-8 bg-[oklch(0.2_0_0)] text-[oklch(0.9_0_0)] p-4 gap-4">
+      <div className="col-span-2">
+
+      <DocumentList 
         uploadedDocuments={uploadedDocuments} 
         selectedFileId={selectedFileId}
         onSelectFile={setSelectedFileId}
-      />
-      <div className="col-span-2 h-full object-scale-down">
+        />
+        </div>
+      <div className="col-span-4">
         <DocumentViewer file={selectedFileId} />
       </div>
-      <div className="col-span-2">Hello</div>
+      <div className="col-span-2">
+        <DocumentEditor file={selectedFileId}/>
+      </div>
     </div>
   );
 }

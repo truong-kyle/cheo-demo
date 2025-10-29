@@ -7,7 +7,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function LoginForm() {
-  const currentDate = new Date().getTime();
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   return (
@@ -44,7 +43,7 @@ export default function LoginForm() {
                 placeholder="Email"
                 autoComplete="email"
                 required
-                className="py-0.5 border-b border-b-gray-500/50 focus:outline-none"
+                className="py-0.5 border-b border-b-[oklch(0.4_0_0)] focus:outline-none"
               />
               <input
                 name="password"
@@ -52,10 +51,11 @@ export default function LoginForm() {
                 placeholder="Password"
                 autoComplete="current-password"
                 required
-                className="py-0.5 border-b border-b-gray-500/50 focus:outline-none"
+                className="py-0.5 border-b border-b-[oklch(0.4_0_0)] focus:outline-none"
               />
-              {error && <p className="text-red-500">{error}</p>}
+              {error && <p className="text-[oklch(0.7_0.2_30)]">{error}</p>}
               <button
+              aria-label="log in"
                 type="submit"
                 className="w-min whitespace-nowrap text-[oklch(0.95_0_0)] rounded-sm px-5 shadow-(--shadow-s) py-1 bg-[oklch(0.5_0.2_270)] self-end cursor-pointer hover:bg-[oklch(0.45_0.2_270)] transition-all"
               >

@@ -34,7 +34,7 @@ export const uploadFile = async (data: File | null) => {
   console.log("uploadFile: Preview generated successfully");
 
   // Pass null for patientId to allow it to be nullable in the database
-  const { error: dbError } = await newDBEntry(uuid, null, data);
+  const { error: dbError } = await newDBEntry(uuid, data);
   if (dbError) {
     console.error("uploadFile: Database insert error", dbError);
     if (dbError.message.includes("duplicate key value")) {
@@ -52,7 +52,6 @@ export const uploadFile = async (data: File | null) => {
 
 export const newDBEntry = async (
   fileUrl: string,
-  patientId: number | null,
   file: File
 ) => {
   return supabase
@@ -62,8 +61,7 @@ export const newDBEntry = async (
         uploaded_by: await getCurrentUser().then((e) => e?.data.session?.user?.id ?? null),
         file_id: fileUrl,
         file_name: file.name,
-        patient_id: 0,
-        data: { size: file.size, type: file.type },
+        data: { "1. first_name": "John", "2. last_name": "Doe", "3. dob": "1990-01-01", "4. gender": "Male", "5. document_type": "ID" },
       },
     ])
     .single();
