@@ -118,9 +118,10 @@ const DocumentViewer = ({ file }: DocumentViewerProps) => {
           <div className="sticky top-0 left-0 z-20 flex items-center gap-3 justify-center p-2 rounded-full bg-[oklch(0.3_0_0)]">
             <button
               aria-label="Zoom out"
-              onClick={() =>
-                setScale((s) => Math.max(0.2, +(s - 0.1).toFixed(2)))
-              }
+              onClick={() => {
+                setFitToWidth(false);
+                setScale((s) => Math.max(0.2, +(s - 0.1).toFixed(2)));
+              }}
               className="px-3 py-1 bg-[oklch(0.6_0_270)] text-white rounded disabled:opacity-50"
             >
               −
@@ -145,9 +146,10 @@ const DocumentViewer = ({ file }: DocumentViewerProps) => {
             </div>
             <button
               aria-label="Zoom in"
-              onClick={() =>
-                setScale((s) => Math.min(3, +(s + 0.1).toFixed(2)))
-              }
+              onClick={() => {
+                setFitToWidth(false);
+                setScale((s) => Math.min(3, +(s + 0.1).toFixed(2)));
+              }}
               className="px-3 py-1 bg-[oklch(0.6_0_270)] text-white rounded disabled:opacity-50"
             >
               +

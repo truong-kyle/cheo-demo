@@ -109,7 +109,6 @@ export default function DocumentEditor({ file }: DocumentEditorProps) {
           className="w-full max-w-lg flex flex-col flex-1 overflow-y-scroll max-h-[95%] px-5"
         >
           {Object.entries(details || {})
-            .sort()
             .map(([key, value], index) => (
               <div key={key} className="flex flex-col">
                 <label
@@ -124,7 +123,7 @@ export default function DocumentEditor({ file }: DocumentEditorProps) {
                     status === "verified"
                       ? "bg-[oklch(0.6_0_0)]"
                       : "bg-[oklch(0.8_0_0)]"
-                  } text-[oklch(0.1_0_0)]  py-1 px-2 shadow-inner shadow-black rounded-full focus:outline-none focus:ring-2 focus:ring-[oklch(0.9_0_0)] focus:bg-[oklch(0.9_0_0)]`}
+                  } text-[oklch(0.1_0_0)]  py-1 px-3 shadow-inner shadow-black rounded-full focus:outline-none focus:ring-2 focus:ring-[oklch(0.9_0_0)] focus:bg-[oklch(0.9_0_0)]`}
                   type="text"
                   disabled={status === "verified"}
                   defaultValue={String(value ?? "")}

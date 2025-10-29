@@ -61,7 +61,7 @@ export const newDBEntry = async (
         uploaded_by: await getCurrentUser().then((e) => e?.data.session?.user?.id ?? null),
         file_id: fileUrl,
         file_name: file.name,
-        data: { "1. first_name": "John", "2. last_name": "Doe", "3. dob": "1990-01-01", "4. gender": "Male", "5. document_type": "ID" },
+        data: { first_name: "John", last_name: "Doe", dob: "1990-01-01", gender: "Male", document_type: "ID" },
       },
     ])
     .single();
