@@ -34,6 +34,7 @@ const DocumentViewer = ({ file }: DocumentViewerProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [fitToWidth, setFitToWidth] = useState(true);
   const [pageWidth, setPageWidth] = useState<number | null>(null);
+  
 
   const updateWidth = () => {
     if (!containerRef.current) return;

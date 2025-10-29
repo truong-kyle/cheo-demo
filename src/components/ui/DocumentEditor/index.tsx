@@ -115,7 +115,7 @@ export default function DocumentEditor({ file }: DocumentEditorProps) {
                   htmlFor={`input-${index}`}
                   className="text-[oklch(0.6_0_0)] font-semibold"
                 >
-                  {key}:
+                  {key == "dob" ? "dob (YYYY-MM-DD): " : key + ":"}
                 </label>
                 <input
                   id={`input-${index}`}

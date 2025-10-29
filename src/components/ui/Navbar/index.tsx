@@ -18,7 +18,7 @@ export default function Navbar({ user }: NavbarProps) {
   const [profileMenu, openProfileMenu] = useState(false);
 
   return (
-    <nav className="rounded-full mt-2 w-[calc(100%-2rem)] self-center flex min-h-16 align-middle items-center justify-between px-10 bg-[oklch(0.3_0_0)] text-[oklch(0.9_0_0)] shadow-(--shadow-s)">
+    <nav className="rounded-xl mt-2 w-[calc(100%-2rem)] self-center flex min-h-16 align-middle items-center justify-between px-10 bg-[oklch(0.23_0_0)] text-[oklch(0.9_0_0)] shadow-(--shadow-s)">
       <Image
         src="/logo-white.webp"
         alt="Logo"
@@ -30,8 +30,8 @@ export default function Navbar({ user }: NavbarProps) {
         <button
           className={`flex space-x-1 py-2 px-10 items-center  rounded-full transition-all duration-200 shadow-(--shadow-s) ${
             navMenu
-              ? "bg-[oklch(0.5_0_0)] hover:bg-[oklch(0.4_0_0)]"
-              : "bg-[oklch(0.6_0_0)] hover:bg-[oklch(0.65_0_0)]"
+              ? "bg-[oklch(0.3_0_0)] hover:bg-[oklch(0.25_0_0)]"
+              : "bg-[oklch(0.4_0_0)] hover:bg-[oklch(0.35_0_0)]"
           }`}
           onClick={() => {
             openNavMenu(!navMenu);
@@ -66,12 +66,7 @@ export default function Navbar({ user }: NavbarProps) {
                   Dashboard
                 </Link>
 
-                <Link
-                  href="/patients"
-                  className="px-7 py-2 hover:bg-[oklch(0.8_0_0)] transition-all rounded-lg cursor-pointer"
-                >
-                  Patients
-                </Link>
+               
               </ul>
             </motion.div>
           )}

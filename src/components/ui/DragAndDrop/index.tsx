@@ -21,6 +21,7 @@ export default function DragAndDrop({ length }: DragAndDropProps) {
       setError("Invalid file type. Please upload a PDF.");
       return;
     }
+    setError(null);
     setData(file);
   };
 
@@ -47,7 +48,7 @@ export default function DragAndDrop({ length }: DragAndDropProps) {
       >
         {length === 0 ? (
           <label className="cursor-pointer flex flex-col items-center justify-center w-full h-full">
-            <UploadCloud width={100} height={100} />
+            <UploadCloud width={100} height={100} className={uploading ? "animate-pulse" : ""} />
             <span>
               {!data ? (
                 <p>Drag & drop a PDF or click to select</p>
@@ -102,9 +103,6 @@ export default function DragAndDrop({ length }: DragAndDropProps) {
                     <UploadCloud className={uploading ? "animate-pulse" : ""} />
                   </button>
                 </div>
-                {error && (
-                  <p className="text-[oklch(0.7_0.2_30)] text-xs">{error}</p>
-                )}
               </>
             ) : (
               <label
@@ -131,9 +129,9 @@ export default function DragAndDrop({ length }: DragAndDropProps) {
           </motion.div>
         )}
       </div>
+        {error && <p className="text-[oklch(0.7_0.2_30)] mb-2">{error}</p>}
       {length == 0 && (
         <>
-          {error && <p className="text-[oklch(0.7_0.2_30)]">{error}</p>}
           <button
             onClick={() => handleUpload(data)}
             disabled={!data || uploading}

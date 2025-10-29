@@ -37,30 +37,6 @@ export default function DocumentList({
     VERIFIED = "verified",
   }
 
-  const [data, setData] = useState<File | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
-
-  const handleUpload = async (file: File | null) => {
-    if (!file) {
-      setError("No file selected");
-      return;
-    }
-    setUploading(true);
-    setError(null);
-
-    const result = await uploadFile(file);
-    setUploading(false);
-    if (result.error) {
-      setError(result.error.message ?? "Upload failed");
-      return;
-    }
-    toast.success("Upload successful!");
-    setData(null);
-    setError(null);
-    window.location.reload();
-  };
-
   return (
     <div className="shrink-0 flex flex-col h-full p-4 bg-[oklch(0.25_0_0)] rounded-xl shadow-(--shadow-m)">
       <div className={`flex flex-col items-center w-full ${uploadedDocuments.data.length === 0 && "h-full"}`}>
