@@ -1,15 +1,9 @@
-"use client";
 import {
   Upload,
   FilePen,
   CircleCheckBig,
-  Plus,
-  UploadCloud,
 } from "lucide-react";
-import { useState } from "react";
-import { uploadFile } from "@/db/client/upload";
 import DragAndDrop from "@/components/ui/DragAndDrop";
-import { toast } from "sonner";
 import { motion } from "motion/react";
 
 interface DocumentListProps {
